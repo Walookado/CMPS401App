@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".TwoButtonApp"
+    android:id="@+id/app_name"
+    android:backgroundTint="#cb0200">
+
+    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/UpButton"
+        android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+        android:layout_above="@+id/DownButton"
+        android:layout_alignStart="@+id/DownButton" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DownButton"
+        android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/UpLeftButton" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/UpLeftButton"
+        android:src="@drawable/ic_call_made_black_24dp_ul"
+        android:layout_alignTop="@+id/UpButton"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/UpRightButton"
+        android:src="@drawable/ic_call_made_black_24dp"
+        android:layout_alignTop="@+id/UpButton"
+        android:layout_alignStart="@+id/DownRightButton" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DownLeftButton"
+        android:src="@drawable/ic_call_made_black_24dp_dl"
+        android:layout_alignTop="@+id/DownButton"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DownRightButton"
+        android:src="@drawable/ic_call_made_black_24dp_dr"
+        android:layout_alignTop="@+id/DownButton"
+        android:layout_toEndOf="@+id/DownButton" />
+
+    <ImageButton
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:id="@+id/fireLaser"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/mybutton"
+        android:foregroundTint="#0000ff"
+        android:backgroundTint="#ff0d0a"
+        android:layout_above="@+id/fireText"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth Connect"
+        android:id="@+id/BTConnect"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="    Fire"
+        android:id="@+id/fireText"
+        android:textAlignment="gravity"
+        android:textColor="#000000"
+        android:layout_alignBottom="@+id/DownLeftButton"
+        android:layout_alignStart="@+id/fireLaser" />
+
+</RelativeLayout>
