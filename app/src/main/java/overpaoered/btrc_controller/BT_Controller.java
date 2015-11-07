@@ -18,11 +18,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class RC_Controller extends Activity implements OnClickListener {
+public class BT_Controller extends Activity implements OnClickListener {
+
+    TextView Result;
 
     private static final String TAG = "bluetooth1";
 
@@ -35,9 +38,9 @@ public class RC_Controller extends Activity implements OnClickListener {
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // MAC-address of Bluetooth module (you must edit this line)
-    private static String address = "20:15:04:30:64:35";
-    private static String address2 = "00:00:00:00:00:00";
-    private static String logtag = "TwoButtonApp";
+    private static String address2 = "20:15:04:30:64:35";
+    private static String address = "94:39:E5:46:A5:2D";
+    private static String logtag = "BTRC_Controller";
     private String dataToSend;
 
     Handler handler = new Handler();
@@ -49,7 +52,7 @@ public class RC_Controller extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.controller_layout);
+        setContentView(R.layout.activity_bt__controller);
 
 
         //Button Stuff
@@ -191,6 +194,7 @@ public class RC_Controller extends Activity implements OnClickListener {
         }
     }
 
+    /*
     @Override
     protected void onPause() { //device goes to sleep or another activity appears
         Log.d(logtag, "onPause() called"); //another activity is currently running (or user has pressed Home)
@@ -210,8 +214,7 @@ public class RC_Controller extends Activity implements OnClickListener {
             errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
         }
     }
-
-}
+    */
 
     protected void checkBTState() {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -353,7 +356,7 @@ public class RC_Controller extends Activity implements OnClickListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_two_button_app, menu);
+        getMenuInflater().inflate(R.menu.menu_bt__controller, menu);
         return true;
     }
 
