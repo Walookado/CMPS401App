@@ -12,6 +12,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
@@ -351,24 +352,6 @@ public class BT_Controller extends Activity implements OnTouchListener {
         }
     }
 
-    /*
-    private void writeData(String data) {
-        try {
-            outStream = btSocket.getOutputStream();
-        } catch (IOException e) {
-            Log.d(TAG, "Bug BEFORE Sending stuff", e);
-        }
-
-        String message = data;
-        byte[] msgBuffer = message.getBytes();
-
-        try {
-            outStream.write(msgBuffer);
-        } catch (IOException e) {
-            Log.d(TAG, "Bug while sending stuff", e);
-        }
-    }
-    */
     public void writeData(String data) {
         // Create temporary object
         ConnectedThread r;
@@ -397,26 +380,32 @@ public class BT_Controller extends Activity implements OnTouchListener {
         stop();
     }
 
+    // Inflate the menu; this adds items to the action bar if it is present.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bt_controller, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_bt_controller, menu);
         return true;
     }
 
+    // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.BTConnect:
+                address = car1;
+                ConnectDevice();
+                return true;
+            case R.id.BTConnect2:
+                address = car2;
+                ConnectDevice();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void errorExit(String title, String message) {

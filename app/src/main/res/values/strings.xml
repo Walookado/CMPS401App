@@ -3,6 +3,7 @@
     <string name="fireText">Fire Laser</string>
     <string name="action_settings">Settings</string>
     <string name="BTConnect">Connect: Car 1</string>
+    <string name="BTConnect2">Connect: Car 2</string>
     <string name="fireButton">fireButton</string>
     <string name="upRight">upright</string>
     <string name="up">up</string>
@@ -10,5 +11,4 @@
     <string name="downLeft">downleft</string>
     <string name="down">down</string>
     <string name="downRight">downright</string>
-    <string name="BTConnect2">Connect: Car 2</string>
 </resources>
