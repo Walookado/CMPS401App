@@ -91,6 +91,10 @@ public class BT_Controller extends Activity implements OnClickListener {
     @Override
     public void onClick(View control) {
         if (control.getId() == R.id.BTConnect) {
+            address = car1;
+            ConnectDevice();
+        } else if (control.getId() == R.id.BTConnect2) {
+            address = car2;
             ConnectDevice();
         }
         if (mConnectedThread != null) {
