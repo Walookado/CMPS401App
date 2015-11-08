@@ -3,7 +3,6 @@ package overpaoered.btrc_controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -11,7 +10,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,7 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,9 +36,10 @@ public class BT_Controller extends Activity implements OnClickListener {
     // SPP UUID service
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    // MAC-address of Bluetooth module (you must edit this line)
-    private static String address2 = "20:15:04:30:64:35";
-    private static String address = "94:39:E5:46:A5:2D";
+    // MAC-address of Bluetooth module (you must edit these lines under car1 and car2 or address)
+    private static String address = "20:15:04:30:64:35";
+    private static String car1 = "20:15:04:30:64:35";
+    private static String car2 = "20:15:04:30:64:35";
     private static String logtag = "BTRC_Controller";
     private String dataToSend;
     private int mState = STATE_NONE;
@@ -51,12 +49,6 @@ public class BT_Controller extends Activity implements OnClickListener {
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
-
-    Handler handler = new Handler();
-    byte delimiter = 10;
-    boolean stopWorker = false;
-    int readBufferPosition = 0;
-    byte[] readBuffer = new byte[1024];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +85,6 @@ public class BT_Controller extends Activity implements OnClickListener {
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        //checkBTState();
-        //BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
     }
 
