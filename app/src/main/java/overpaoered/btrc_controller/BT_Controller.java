@@ -135,7 +135,7 @@ public class BT_Controller extends Activity implements OnClickListener {
                     writeData(dataToSend);
                     break;
                 default:
-                    dataToSend = "0";
+                    dataToSend = "S";
                     writeData(dataToSend);
                     break;
             }
