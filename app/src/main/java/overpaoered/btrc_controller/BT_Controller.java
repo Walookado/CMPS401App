@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,7 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
-public class BT_Controller extends Activity implements OnTouchListener, OnClickListener {
+public class BT_Controller extends Activity implements OnTouchListener {
 
 
     // Intent request codes
@@ -54,12 +53,11 @@ public class BT_Controller extends Activity implements OnTouchListener, OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bt__controller);
+        setContentView(R.layout.activity_bt_controller);
 
 
         //Button Stuff
         ImageButton buttonUp = (ImageButton) findViewById(R.id.UpButton);
-        //buttonUp.setOnClickListener(this);
         buttonUp.setOnTouchListener(this);
 
         ImageButton buttonDown = (ImageButton) findViewById(R.id.DownButton);
@@ -96,6 +94,7 @@ public class BT_Controller extends Activity implements OnTouchListener, OnClickL
     @Override
     public boolean onTouch(View control, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            control.setPressed(true);
             if (control.getId() == R.id.BTConnect) {
                 address = car1;
                 ConnectDevice();
@@ -141,59 +140,11 @@ public class BT_Controller extends Activity implements OnTouchListener, OnClickL
             }
             return true;
         } else {
+            control.setPressed(false);
             if (mConnectedThread != null) {
                 writeData("S");
             }
             return false;
-        }
-    }
-
-    @Override
-    public void onClick(View control) {
-        if (control.getId() == R.id.BTConnect) {
-            address = car1;
-            ConnectDevice();
-        } else if (control.getId() == R.id.BTConnect2) {
-            address = car2;
-            ConnectDevice();
-        }
-        if (mConnectedThread != null) {
-            dataToSend = "S";
-            writeData(dataToSend);
-            switch (control.getId()) {
-                case R.id.UpButton:
-                    dataToSend = "F";
-                    writeData(dataToSend);
-                    break;
-                case R.id.DownButton:
-                    dataToSend = "B";
-                    writeData(dataToSend);
-                    break;
-                case R.id.UpLeftButton:
-                    dataToSend = "G";
-                    writeData(dataToSend);
-                    break;
-                case R.id.UpRightButton:
-                    dataToSend = "I";
-                    writeData(dataToSend);
-                    break;
-                case R.id.DownLeftButton:
-                    dataToSend = "H";
-                    writeData(dataToSend);
-                    break;
-                case R.id.DownRightButton:
-                    dataToSend = "J";
-                    writeData(dataToSend);
-                    break;
-                case R.id.fireLaser:
-                    dataToSend = "2";
-                    writeData(dataToSend);
-                    break;
-                default:
-                    dataToSend = "S";
-                    writeData(dataToSend);
-                    break;
-            }
         }
     }
 
@@ -449,7 +400,7 @@ public class BT_Controller extends Activity implements OnTouchListener, OnClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bt__controller, menu);
+        getMenuInflater().inflate(R.menu.menu_bt_controller, menu);
         return true;
     }
 
