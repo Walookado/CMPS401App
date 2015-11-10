@@ -44,7 +44,6 @@ public class BT_Controller extends Activity implements OnTouchListener {
     private static String address = "20:15:04:30:64:35";
     private static String car1 = "20:15:04:30:64:35";
     private static String car2 = "20:15:04:30:64:35";
-    private String dataToSend;
     private int mState = STATE_NONE;
 
     // Constants that indicate the current connection state
@@ -97,6 +96,7 @@ public class BT_Controller extends Activity implements OnTouchListener {
 
     @Override
     public boolean onTouch(View control, MotionEvent event) {
+        String dataToSend;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             control.setPressed(true);
             if (control.getId() == R.id.BTConnect) {
