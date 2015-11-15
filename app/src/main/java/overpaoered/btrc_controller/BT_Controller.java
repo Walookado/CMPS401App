@@ -11,8 +11,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -31,7 +29,6 @@ public class BT_Controller extends Activity implements OnTouchListener {
     private static final int REQUEST_ENABLE_BT = 3;
 
     private static final String TAG = "bluetooth1";
-    public static final String TOAST = "toast";
 
     private BluetoothAdapter mBluetoothAdapter = null;
     private ConnectThread mConnectThread;
@@ -41,9 +38,9 @@ public class BT_Controller extends Activity implements OnTouchListener {
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     // MAC-address of Bluetooth module (you must edit these lines under car1 and car2 or address)
-    private static String address = "20:15:04:30:64:35";
+    private static String address = "00:00:00:00:00:00";
     private static String car1 = "20:15:04:30:64:35";
-    private static String car2 = "20:15:04:30:64:35";
+    private static String car2 = "20:15:05:04:04:68";
     private int mState = STATE_NONE;
 
     // Constants that indicate the current connection state
@@ -51,7 +48,6 @@ public class BT_Controller extends Activity implements OnTouchListener {
     //public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
-    public static final int MESSAGE_TOAST = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,10 +157,10 @@ public class BT_Controller extends Activity implements OnTouchListener {
         mState = state;
         switch (state) {
             case STATE_CONNECTING:
-                Toast.makeText(getApplicationContext(), "Connecting...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Connecting...", Toast.LENGTH_SHORT).show();
                 break;
             case STATE_CONNECTED:
-                Toast.makeText(getApplicationContext(), "Connected Successfully", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Connected Successfully", Toast.LENGTH_SHORT).show();
             default:
                 break;
         }
@@ -293,7 +289,7 @@ public class BT_Controller extends Activity implements OnTouchListener {
                 } catch (IOException e2) {
                     Log.e(TAG, "unable to close() socket during connection failure", e2);
                 }
-                connectionFailed();
+                //connectionFailed();
                 return;
             }
 
@@ -349,10 +345,12 @@ public class BT_Controller extends Activity implements OnTouchListener {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
+                    String input = Integer.toString(bytes);
+                    Log.i(TAG, input);
 
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
-                    connectionLost();
+                    //connectionLost();
                     break;
                 }
             }
@@ -393,37 +391,12 @@ public class BT_Controller extends Activity implements OnTouchListener {
         r.write(data);
     }
 
-    /**
-     * The Handler that gets information back from the BluetoothChatService
-     */
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_TOAST:
-                    if (null != getApplicationContext()) {
-                        Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-            }
-        }
-    };
-
     private void connectionFailed() {
-        Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        bundle.putString(TOAST, "Unable to connect device");
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
+        Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
     }
 
     private void connectionLost() {
-        Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
-        Bundle bundle = new Bundle();
-        bundle.putString(TOAST, "Device Connection Lost");
-        msg.setData(bundle);
-        mHandler.sendMessage(msg);
+        Toast.makeText(this, "Connection Lost", Toast.LENGTH_SHORT).show();
     }
 
     //the activity is not visible anymore
