@@ -49,6 +49,11 @@ public class BT_Controller extends Activity implements OnTouchListener {
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
+    /**
+     * Runs on app creation which handles button and bluetooth creation
+     *
+     * @param savedInstanceState the current state of the app
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +95,13 @@ public class BT_Controller extends Activity implements OnTouchListener {
 
     }
 
+    /**
+     * Handles touch events from the app to send bytes to the connected bluetooth device
+     *
+     * @param control the current view context
+     * @param event   the registered touch event
+     * @return boolean for registered touch event
+     */
     @Override
     public boolean onTouch(View control, MotionEvent event) {
         String dataToSend;
@@ -148,10 +160,18 @@ public class BT_Controller extends Activity implements OnTouchListener {
         }
     }
 
+    /**
+     * Get current connection state
+     */
     public synchronized int getState() {
         return mState;
     }
 
+    /**
+     * Set connection state
+     *
+     * @param state connection state
+     */
     private synchronized void setState(int state) {
         Log.d(TAG, "setState() " + mState + " -> " + state);
         mState = state;
@@ -166,7 +186,9 @@ public class BT_Controller extends Activity implements OnTouchListener {
         }
     }
 
-
+    /**
+     * Runs on start and asks to enable bluetooth if available.
+     */
     @Override
     protected void onStart() {//activity is started and visible to the user
         Log.d(TAG, "onStart() called");
@@ -179,7 +201,9 @@ public class BT_Controller extends Activity implements OnTouchListener {
         }
     }
 
-    //activity was resumed and is visible again
+    /**
+     * Called on app resume and attempts to start connection if one previously existed
+     */
     @Override
     protected void onResume() {
         Log.d(TAG, "onResume() called");
@@ -188,6 +212,68 @@ public class BT_Controller extends Activity implements OnTouchListener {
 
     }
 
+    /**
+     * Activity was stopped
+     */
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop() called");
+        super.onStop();
+
+    }
+
+    /**
+     * Activity was killed
+     */
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy() called");
+        super.onDestroy();
+
+        stop();
+    }
+
+    /**
+     * Inflates menu and adds items if present
+     *
+     * @param menu activity to call
+     * @return sends true if operation is successful
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_bt_controller, menu);
+        return true;
+    }
+
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     *
+     * @param item menu item selected
+     * @return sends true if item was selected
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.BTConnect:
+                address = car1;
+                ConnectDevice();
+                return true;
+            case R.id.BTConnect2:
+                address = car2;
+                ConnectDevice();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * Setup bluetooth device connection and send it to the utility class to create connection thread
+     */
     private void ConnectDevice() {
         Log.d(TAG, address);
 
@@ -198,6 +284,11 @@ public class BT_Controller extends Activity implements OnTouchListener {
         connect(device);
     }
 
+    /**
+     * Create connection thread and start it
+     *
+     * @param device remote bluetooth device being connected to
+     */
     public synchronized void connect(BluetoothDevice device) {
         Log.d(TAG, "connect to: " + device);
         // Start the thread to connect with the given device
@@ -206,6 +297,11 @@ public class BT_Controller extends Activity implements OnTouchListener {
         setState(STATE_CONNECTING);
     }
 
+    /**
+     * Close thread for connecting and start a thread to manage the created connection
+     *
+     * @param socket the current socket being used for connection
+     */
     public synchronized void connected(BluetoothSocket socket) {
         Log.d(TAG, "connected, Socket");
 
@@ -228,6 +324,9 @@ public class BT_Controller extends Activity implements OnTouchListener {
         setState(STATE_CONNECTED);
     }
 
+    /**
+     * Close all running threads
+     */
     public synchronized void stop() {
         Log.d(TAG, "stop");
 
@@ -312,6 +411,11 @@ public class BT_Controller extends Activity implements OnTouchListener {
         }
     }
 
+    /**
+     * This thread maintains the connection between the app and bluetooth device
+     * in order to send data. It listens for data from the device and will close
+     * itself if it detects a lost connection
+     */
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
@@ -380,6 +484,11 @@ public class BT_Controller extends Activity implements OnTouchListener {
         }
     }
 
+    /**
+     * Writes data from touch events on the app to the connected thread
+     *
+     * @param data bytes to send to thread
+     */
     public void writeData(String data) {
         // Create temporary object
         ConnectedThread r;
@@ -391,57 +500,18 @@ public class BT_Controller extends Activity implements OnTouchListener {
         r.write(data);
     }
 
+    /**
+     * Send toast to app stating a connection failed
+     */
     private void connectionFailed() {
         Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Send toast to app stating connection was lost
+     */
     private void connectionLost() {
         Toast.makeText(this, "Connection Lost", Toast.LENGTH_SHORT).show();
-    }
-
-    //the activity is not visible anymore
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop() called");
-        super.onStop();
-
-    }
-
-    //android has killed this activity
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy() called");
-        super.onDestroy();
-
-        stop();
-    }
-
-    // Inflate the menu; this adds items to the action bar if it is present.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_bt_controller, menu);
-        return true;
-    }
-
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.BTConnect:
-                address = car1;
-                ConnectDevice();
-                return true;
-            case R.id.BTConnect2:
-                address = car2;
-                ConnectDevice();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
 
