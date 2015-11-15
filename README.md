@@ -14,4 +14,4 @@ The apks are found under the path "CMPS401App/app/build/outputs/apk"
 
 "CMPS401App/app/src/main/java/overpaoered/btrc_controller"
 
-"CMPS401App/master/app/src/main/res/layout"
+"CMPS401App/app/src/main/res/layout"
