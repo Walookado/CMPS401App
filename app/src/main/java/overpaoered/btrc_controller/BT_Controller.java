@@ -1,10 +1,5 @@
 package overpaoered.btrc_controller;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,15 +7,20 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
 
 public class BT_Controller extends Activity implements OnTouchListener {
 
@@ -80,7 +80,7 @@ public class BT_Controller extends Activity implements OnTouchListener {
         buttonDownRight.setOnTouchListener(this);
 
         ImageButton buttonFire = (ImageButton) findViewById(R.id.fireLaser);
-        buttonFire.setOnTouchListener(this);
+        buttonFire.setOnTouchListener(fireListen);
 
         Button buttonBluetooth = (Button) findViewById(R.id.BTConnect);
         buttonBluetooth.setOnTouchListener(this);
@@ -95,6 +95,7 @@ public class BT_Controller extends Activity implements OnTouchListener {
 
     }
 
+
     /**
      * Handles touch events from the app to send bytes to the connected bluetooth device
      *
@@ -105,6 +106,7 @@ public class BT_Controller extends Activity implements OnTouchListener {
     @Override
     public boolean onTouch(View control, MotionEvent event) {
         String dataToSend;
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             control.setPressed(true);
             if (control.getId() == R.id.BTConnect) {
@@ -140,25 +142,46 @@ public class BT_Controller extends Activity implements OnTouchListener {
                         dataToSend = "J";
                         writeData(dataToSend);
                         break;
-                    case R.id.fireLaser:
-                        dataToSend = "2";
-                        writeData(dataToSend);
-                        break;
                     default:
-                        dataToSend = "S";
-                        writeData(dataToSend);
                         break;
                 }
             }
             return true;
-        } else {
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
             control.setPressed(false);
             if (mConnectedThread != null) {
                 writeData("S");
             }
             return false;
+        } else {
+            return false;
         }
     }
+
+    private final OnTouchListener fireListen = new OnTouchListener() {
+        String dataToSend;
+
+        @Override
+        public boolean onTouch(View control, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                control.setPressed(true);
+                if (mConnectedThread != null) {
+                    switch (control.getId()) {
+                        case R.id.fireLaser:
+                            dataToSend = "2";
+                            writeData(dataToSend);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+    };
 
     /**
      * Get current connection state
